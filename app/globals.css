@@ -1,0 +1,126 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+
+/* ───────── Tokens (single source for CSS; Tailwind theme mirrors these) ───────── */
+:root {
+  --forest-950: #0B1713; --forest-800: #123C2F; --forest-600: #2F6B56;
+  --sage-300: #A8C5A0; --sage-100: #E3ECDD; --cream-50: #F5F3EA; --cream-200: #EBE7D6;
+  --muted: #3F5149;
+  --d-fast: 150ms; --d-base: 300ms; --d-slow: 600ms; --d-hero: 900ms;
+  --ease-out: cubic-bezier(.22,1,.36,1); --ease-inout: cubic-bezier(.65,0,.35,1); --stagger: 60ms;
+  --shadow-soft: 0 30px 60px -20px rgb(18 60 47 / .35);
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.24 0 0 0 0 0.18 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@layer base {
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { @apply bg-cream-50 font-sans text-ink antialiased; overflow-x: clip; }
+  h1, h2, h3 { @apply font-display; }
+  :focus-visible { outline: 3px solid var(--forest-600); outline-offset: 3px; border-radius: 6px; }
+  .on-dark :focus-visible { outline-color: var(--sage-300); }
+  ::selection { background: var(--sage-300); color: var(--forest-950); }
+}
+
+@layer components {
+  /* Buttons: pills, 44px minimum target */
+  .btn { @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-fast ease-out-expo active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50; }
+  .btn-primary { @apply btn bg-forest-800 text-cream-50 hover:bg-forest-950; }
+  .btn-dark { @apply btn bg-forest-950 text-cream-50 hover:bg-forest-600; }
+  .btn-ghost { @apply btn border border-forest-800/40 text-forest-800 hover:bg-forest-800 hover:text-cream-50; }
+  .btn-light { @apply btn bg-cream-50 text-forest-800 hover:bg-sage-300; }
+  .btn-ghost-light { @apply btn border border-cream-50/40 text-cream-50 hover:bg-cream-50 hover:text-forest-800; }
+  .btn .arrow { @apply transition-transform duration-fast ease-out-expo; }
+  .btn:hover .arrow { transform: translateX(4px); }
+
+  .input { @apply w-full rounded-2xl border border-forest-800/30 bg-white px-4 py-3 text-sm outline-none transition duration-fast placeholder:text-ink-muted/70 focus:border-forest-800 focus:ring-2 focus:ring-sage-300; min-height: 48px; }
+  .input-err { @apply border-red-700; }
+  .wrap { @apply mx-auto w-full max-w-[1280px] px-5 md:px-8; }
+  .section { @apply relative py-20 md:py-28; }
+  .eyebrow { @apply font-num text-xs font-medium uppercase tracking-[0.22em] text-ink-muted; }
+  .on-dark .eyebrow, .eyebrow-dark { @apply text-sage-300; }
+  .h-display { @apply font-display font-extrabold text-forest-800; letter-spacing: -0.03em; line-height: 1.02; }
+  .accent-word { @apply font-accent font-normal italic; letter-spacing: -0.01em; }
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full bg-sage-100 px-3 py-1 font-num text-[11px] font-medium uppercase tracking-[0.16em] text-forest-800; }
+  .chip-dark { @apply chip bg-forest-800 text-sage-300; }
+  .chip-warn { @apply chip bg-amber-100 text-amber-900; }
+
+  /* Surfaces */
+  .glass { background: rgb(255 255 255 / .55); backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2); border: 1px solid rgb(255 255 255 / .55); box-shadow: inset 0 1px 0 rgb(255 255 255 / .7), 0 12px 30px -16px rgb(18 60 47 / .35); }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .glass { background: #fff; } }
+  @media (prefers-reduced-transparency: reduce) { .glass { background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; } }
+  @media (hover: none) { .glass { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); } }
+  .grain { position: relative; isolation: isolate; }
+  .grain::before { content: ''; position: absolute; inset: 0; z-index: -1; background-image: var(--grain); opacity: .03; pointer-events: none; }
+  .shadow-contact { background: radial-gradient(closest-side, rgb(11 23 19 / .35), transparent); }
+
+  /* Shapes */
+  .arch { border-radius: 9999px 9999px 28px 28px; }
+  .arch-sm { border-radius: 9999px 9999px 20px 20px; }
+  .blob-1 { clip-path: url(#blob-1); } .blob-2 { clip-path: url(#blob-2); } .blob-3 { clip-path: url(#blob-3); }
+
+  .skip { @apply fixed left-4 top-3 z-[100] -translate-y-24 rounded-full bg-forest-950 px-5 py-3 text-sm font-semibold text-cream-50 transition-transform focus:translate-y-0; }
+  .lift { transition: transform var(--d-base) var(--ease-out), box-shadow var(--d-base) var(--ease-out); }
+  .lift:hover, .lift:focus-within { transform: translateY(-6px); }
+  .zoom img { transition: transform var(--d-base) var(--ease-out); }
+  .zoom:hover img, .zoom:focus-within img { transform: scale(1.06); }
+  .skeleton { position: relative; overflow: hidden; background: var(--cream-200); border-radius: 20px; }
+  .skeleton::after { content: ''; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgb(255 255 255 / .55), transparent); animation: shimmer 1.4s infinite; }
+  .no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+  .outline-word { -webkit-text-stroke: 1.5px var(--forest-800); color: transparent; font-family: var(--font-sora), sans-serif; font-weight: 800; letter-spacing: .04em; }
+  .on-dark .outline-word { -webkit-text-stroke-color: var(--sage-300); }
+}
+
+/* ───────── Motion: transform / opacity only. Keyframes use `from` only so "no animation" = final state ───────── */
+@keyframes rise { from { opacity: 0; transform: translateY(45%); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes float { 0%, 100% { transform: translateY(-8px); } 50% { transform: translateY(8px); } }
+@keyframes drift { 0%, 100% { transform: translate(0,0) rotate(-3deg); } 50% { transform: translate(8px,-10px) rotate(3deg); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+@keyframes draw { from { stroke-dashoffset: 80; } }
+@keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+@keyframes bounce-bag { 0%, 100% { transform: translateY(0); } 35% { transform: translateY(-5px); } 65% { transform: translateY(1px); } }
+@keyframes shimmer { to { transform: translateX(100%); } }
+@keyframes pulse-once { 0% { box-shadow: 0 0 0 0 rgb(47 107 86 / .6); } 100% { box-shadow: 0 0 0 18px rgb(47 107 86 / 0); } }
+@keyframes leaf-fall { from { opacity: 0; transform: translate(var(--x0, 0), -30px) rotate(0); } 20% { opacity: 1; } to { opacity: 1; transform: translate(var(--x1, 0), var(--y1, 40px)) rotate(var(--r, 90deg)); } }
+@keyframes route { from { transform: scaleX(0); } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(14px); } }
+
+.hero-word { display: inline-block; animation: rise var(--d-hero) var(--ease-out) both; animation-delay: calc(var(--i, 0) * var(--stagger)); }
+.hero-accent { display: inline-block; animation: fade-in var(--d-hero) var(--ease-out) both; animation-delay: calc(var(--i, 5) * var(--stagger) + 200ms); }
+.hero-fade { animation: slide-up var(--d-slow) var(--ease-out) both; animation-delay: calc(var(--i, 0) * var(--stagger) + 300ms); }
+.float { animation: float 6s var(--ease-inout) infinite; }
+.drift { animation: drift 9s var(--ease-inout) infinite; animation-delay: var(--delay, 0s); }
+.spin-slow { animation: spin-slow 20s linear infinite; transform-origin: 50% 50%; }
+.sway { animation: sway 12s var(--ease-inout) infinite; transform-origin: 0% 100%; }
+.draw-in path, .draw-in circle, .draw-in line, .draw-in polyline, .draw-in rect { stroke-dasharray: 80; stroke-dashoffset: 0; }
+html.js .reveal .draw-in path, html.js .reveal .draw-in circle, html.js .reveal .draw-in line, html.js .reveal .draw-in polyline, html.js .reveal .draw-in rect { stroke-dashoffset: 80; }
+html.js .reveal.in .draw-in path, html.js .reveal.in .draw-in circle, html.js .reveal.in .draw-in line, html.js .reveal.in .draw-in polyline, html.js .reveal.in .draw-in rect { animation: draw 600ms var(--ease-out) forwards; animation-delay: calc(var(--i, 0) * 80ms); stroke-dashoffset: 0; }
+.pop { animation: pop 450ms var(--ease-out); }
+.bounce-bag { animation: bounce-bag 450ms var(--ease-out); }
+.pulse-once { animation: pulse-once 1.6s var(--ease-out) 3; }
+.stagger-in { animation: slide-up var(--d-slow) var(--ease-out) both; animation-delay: calc(var(--i, 0) * var(--stagger) + 80ms); }
+.check-draw path { stroke-dasharray: 40; animation: draw-check 700ms var(--ease-out) both; }
+@keyframes draw-check { from { stroke-dashoffset: 40; } }
+.leaf { animation: leaf-fall 1.5s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 120ms); }
+
+/* Reveal: hidden state only exists once the pre-paint script has added html.js */
+html.js .reveal { opacity: 0; transform: translate3d(0, 24px, 0); transition: opacity var(--d-slow) var(--ease-out), transform var(--d-slow) var(--ease-out); transition-delay: calc(var(--i, 0) * var(--stagger)); }
+html.js .reveal.in { opacity: 1; transform: none; }
+html.js .reveal-scale { transform: scale(.96); }
+
+
+/* Touch / low-power: no heavy decorative loops */
+@media (hover: none) { .parallax { transform: none !important; } }
+
+/* Reduced motion: everything appears immediately and stays static and usable */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important; }
+  html.js .reveal { opacity: 1; transform: none; }
+  html.js .reveal .draw-in * { stroke-dashoffset: 0 !important; }
+  .lift:hover, .lift:focus-within, .zoom:hover img, .zoom:focus-within img { transform: none; }
+  .btn:active { transform: none; }
+  .parallax { transform: none !important; }
+}
+.pulse-1 { animation: pulse-once 1.6s var(--ease-out) 1; }
+@media (prefers-reduced-motion: reduce) { .leaf { display: none; } }
