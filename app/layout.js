@@ -1,4 +1,5 @@
 import './globals.css';
+import Script from 'next/script';
 import localFont from 'next/font/local';
 import { CartProvider } from '@/components/Cart';
 import { CatalogProvider } from '@/components/Catalog';
@@ -50,7 +51,16 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${sora.variable} ${inter.variable} ${grotesk.variable} ${accent.variable}`}>
       <head><script dangerouslySetInnerHTML={{ __html: PRE }} /></head>
       <body id="top">
-        <a href="#main" className="skip">Skip to content</a>
+         <Script src="https://www.googletagmanager.com/gtag/js?id=G-7RCGQRNWTE" strategy="afterInteractive" />
+  <Script id="ga-init" strategy="afterInteractive">
+    {`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-7RCGQRNWTE');
+    `}
+  </Script>
+  <a href="#main" className="skip">Skip to content</a>
         <BlobDefs />
         <CatalogProvider products={catalog}>
           <CurrencyProvider>
