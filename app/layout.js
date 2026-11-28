@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-7RCGQRNWTE');
+      gtag('config', 'G-7RCGQRNWTE', { allow_google_signals: false, allow_ad_personalization_signals: false });
     `}
   </Script>
   <a href="#main" className="skip">Skip to content</a>
